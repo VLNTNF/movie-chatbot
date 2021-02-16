@@ -2,11 +2,11 @@
 <br>
 
 <p align="center">
-  <img src="./images/heroku.png" height="100"/>
-  <img src="./images/cross.png" height="100" hspace="10" hspace="10"/>
-  <img src="./images/wit-ai.png" height="100"/> 
-  <img src="./images/cross.png" height="100" hspace="10"/>
-  <img src="./images/messenger.png" height="100"/>
+  <img src="./images/heroku.png" height="80"/>
+  <img src="./images/cross.png" hspace="10" height="80"/>
+  <img src="./images/wit-ai.png" height="80"/> 
+  <img src="./images/cross.png" hspace="10" height="80"/>
+  <img src="./images/messenger.png" height="80"/>
 </p>
 <br>
 
