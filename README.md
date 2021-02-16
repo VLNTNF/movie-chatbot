@@ -6,7 +6,7 @@
   <img src="./images/cross.png" hspace="10" height="80"/>
   <img src="./images/wit-ai.png" height="80"/> 
   <img src="./images/cross.png" hspace="10" height="80"/>
-  <img src="./images/messenger.png" height="80"/>
+  <img src="./images/tmdb.png" height="80"/>
 </p>
 <br>
 
