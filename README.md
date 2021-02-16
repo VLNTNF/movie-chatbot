@@ -11,4 +11,5 @@
 <br>
 
 ## Try it now !
-💬 [link to chatbot](https://m.me/movie.chatbots)
+
+[link to chatbot](https://m.me/movie.chatbots) <img src="./images/messenger.png" height="15"/>  
