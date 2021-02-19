@@ -175,7 +175,7 @@ module.exports = (nlpData, senderID) => {
             }
             else if (intent == 'welcoming') {
                 try {
-                    let response = personProfile(senderID);
+                    let response = await personProfile(senderID);
                     if (response) {
                         let text = `Hello ${response.first_name} 😀`;
                         resolve({
