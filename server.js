@@ -19,7 +19,7 @@ server.post('/', (request, response, data) => {
     const userData = FB.messageHandler(data);
     console.log(userData.content.nlp.intents);
     console.log(userData.content.nlp.entities);
-    TMDB(userData.content.nlp).then(value => {
+    TMDB(userData.content.nlp, userData.sender).then(value => {
       if(value.img != null){
         console.log(value.img);
         if (Array.isArray(value.img)){

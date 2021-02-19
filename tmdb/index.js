@@ -2,6 +2,18 @@
 const config = require("../config");
 const axios = require('axios');
 
+const personProfile = async (id) => {
+    let url = `https://graph.facebook.com/${id}?fields=first_name,last_name&access_token=${config.APP_SECRET}`;
+    const response = await axios(url);
+    const { data, status } = response;
+    if (status >= 200 && status < 300) {
+        return data;
+    } else {
+        console.error(status);
+        return null;
+    }
+}
+
 const getGenres = async (ids) => {
     let url = `https://api.themoviedb.org/3/genre/movie/list?api_key=${config.TMDB}&language=en-US`;
     const response = await axios(url);
@@ -87,7 +99,7 @@ const extractEntity = (nlp, entity) => {
     return null;
 }
 
-module.exports = nlpData => {
+module.exports = (nlpData, senderID) => {
     return new Promise(async (resolve, reject) => {
         let intent = extractIntent(nlpData);
         if (intent) {
@@ -146,6 +158,26 @@ module.exports = nlpData => {
                     let response = await getMovieData(movie, releaseYear);
                     if (response) {
                         let text = `${response.title} was released in ${response.release_date.slice(0, 4)}.`;
+                        resolve({
+                            txt: text,
+                            img: null
+                        });
+                    }
+                    else {
+                        resolve({
+                            txt: "I'm struggling with the API!",
+                            img: null
+                        });
+                    }
+                } catch (error) {
+                    reject(error);
+                }
+            }
+            else if (intent == 'welcoming') {
+                try {
+                    let response = personProfile(senderID);
+                    if (response) {
+                        let text = `Hello ${response.first_name} 😀`;
                         resolve({
                             txt: text,
                             img: null
