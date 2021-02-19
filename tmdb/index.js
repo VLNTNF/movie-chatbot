@@ -3,7 +3,7 @@ const config = require("../config");
 const axios = require('axios');
 
 const personProfile = async (id) => {
-    let url = `https://graph.facebook.com/${id}?fields=first_name,last_name&access_token=${config.APP_SECRET}`;
+    let url = `https://graph.facebook.com/${id}?fields=first_name,last_name&access_token=${config.FB.ACCESS_TOKEN}`;
     const response = await axios(url);
     const { data, status } = response;
     if (status >= 200 && status < 300) {
