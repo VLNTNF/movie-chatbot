@@ -43,7 +43,7 @@ const getPerson = async (id) => {
         console.error(status);
         return false;
     }
-    
+
 }
 
 const getMovieData = async (movie, releaseYear = null) => {
@@ -104,98 +104,105 @@ module.exports = (nlpData, senderID) => {
         let intent = extractIntent(nlpData);
         if (intent) {
             let movie = extractEntity(nlpData, 'movie:movie');
-            let releaseYear = extractEntity(nlpData, 'releaseYear:releaseYear');
-            if (intent == 'movieinfo') {
-                try {
-                    let response = await getMovieData(movie, releaseYear);
-                    let genres = await getGenres(response.genre_ids);
-                    if (response) {
-                        let text = `${response.title} is a movie from ${response.release_date.slice(0, 4)}.\n\nGenres: ${genres.join(', ')}\n\nPitch:\n${response.overview}`;
-                        let image = `https://image.tmdb.org/t/p/original${response.poster_path}`;
-                        resolve({
-                            txt: text,
-                            img: image
-                        });
-                    }
-                    else {
-                        resolve({
-                            txt: "I'm struggling with the API!",
-                            img: null
-                        });
-                    }
-                } catch (error) {
-                    reject(error);
-                }
-            }
-            else if (intent == 'director') {
-                try {
-                    let response = await getCredits(movie, releaseYear);
-                    var directors = [];
-                    response.crew.forEach(entry => {
-                        if (entry.job == 'Director') {
-                            directors.push(entry.name);
+            if (movie) {
+                let releaseYear = extractEntity(nlpData, 'releaseYear:releaseYear');
+                if (intent == 'movieinfo') {
+                    try {
+                        let response = await getMovieData(movie, releaseYear);
+                        let genres = await getGenres(response.genre_ids);
+                        if (response) {
+                            let text = `${response.title} is a movie from ${response.release_date.slice(0, 4)}.\n\nGenres: ${genres.join(', ')}\n\nPitch:\n${response.overview}`;
+                            let image = `https://image.tmdb.org/t/p/original${response.poster_path}`;
+                            resolve({
+                                txt: text,
+                                img: image
+                            });
                         }
+                        else {
+                            resolve({
+                                txt: "I'm struggling with the API!",
+                                img: null
+                            });
+                        }
+                    } catch (error) {
+                        reject(error);
+                    }
+                }
+                else if (intent == 'director') {
+                    try {
+                        let response = await getCredits(movie, releaseYear);
+                        var directors = [];
+                        response.crew.forEach(entry => {
+                            if (entry.job == 'Director') {
+                                directors.push(entry.name);
+                            }
+                        });
+                        if (response) {
+                            let text = `${response['title']} has been directed by ${directors.join(', ')}.`;
+                            resolve({
+                                txt: text,
+                                img: null
+                            });
+                        }
+                        else {
+                            resolve({
+                                txt: "I'm struggling with the API!",
+                                img: null
+                            });
+                        }
+                    } catch (error) {
+                        reject(error);
+                    }
+                }
+                else if (intent == 'releaseYear') {
+                    try {
+                        let response = await getMovieData(movie, releaseYear);
+                        if (response) {
+                            let text = `${response.title} was released in ${response.release_date.slice(0, 4)}.`;
+                            resolve({
+                                txt: text,
+                                img: null
+                            });
+                        }
+                        else {
+                            resolve({
+                                txt: "I'm struggling with the API!",
+                                img: null
+                            });
+                        }
+                    } catch (error) {
+                        reject(error);
+                    }
+                }
+                else if (intent == 'welcoming') {
+                    try {
+                        let response = await personProfile(senderID);
+                        if (response) {
+                            let text = `Hello ${response.first_name} 😀`;
+                            resolve({
+                                txt: text,
+                                img: null
+                            });
+                        }
+                        else {
+                            resolve({
+                                txt: "I'm struggling with the API!",
+                                img: null
+                            });
+                        }
+                    } catch (error) {
+                        reject(error);
+                    }
+                }
+                else {
+                    resolve({
+                        txt: "My dev messed me up!",
+                        img: null
                     });
-                    if (response) {
-                        let text = `${response['title']} has been directed by ${directors.join(', ')}.`;
-                        resolve({
-                            txt: text,
-                            img: null
-                        });
-                    }
-                    else {
-                        resolve({
-                            txt: "I'm struggling with the API!",
-                            img: null
-                        });
-                    }
-                } catch (error) {
-                    reject(error);
                 }
-            }
-            else if (intent == 'releaseYear') {
-                try {
-                    let response = await getMovieData(movie, releaseYear);
-                    if (response) {
-                        let text = `${response.title} was released in ${response.release_date.slice(0, 4)}.`;
-                        resolve({
-                            txt: text,
-                            img: null
-                        });
-                    }
-                    else {
-                        resolve({
-                            txt: "I'm struggling with the API!",
-                            img: null
-                        });
-                    }
-                } catch (error) {
-                    reject(error);
-                }
-            }
-            else if (intent == 'welcoming') {
-                try {
-                    let response = await personProfile(senderID);
-                    if (response) {
-                        let text = `Hello ${response.first_name} 😀`;
-                        resolve({
-                            txt: text,
-                            img: null
-                        });
-                    }
-                    else {
-                        resolve({
-                            txt: "I'm struggling with the API!",
-                            img: null
-                        });
-                    }
-                } catch (error) {
-                    reject(error);
-                }
-            }
-            else {
+            } else {
                 resolve({
-                    txt: "My dev messed me up!",
+                    txt: "I'm not sure I understand you!",
                     img: null
                 });
             }
