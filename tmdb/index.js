@@ -10,7 +10,7 @@ const personProfile = async (id) => {
         return data;
     } else {
         console.error(status);
-        return null;
+        return false;
     }
 }
 
@@ -28,7 +28,7 @@ const getGenres = async (ids) => {
         return genre;
     } else {
         console.error(status);
-        return null;
+        return false;
     }
 }
 
@@ -41,7 +41,7 @@ const getPerson = async (id) => {
         return data;
     } else {
         console.error(status);
-        return null;
+        return false;
     }
     
 }
@@ -55,7 +55,7 @@ const getMovieData = async (movie, releaseYear = null) => {
         return data.results[0];
     } else {
         console.error(status);
-        return null;
+        return false;
     }
 }
 
@@ -72,7 +72,7 @@ const getCredits = async (movie, releaseYear = null) => {
             return data;
         } else {
             console.error(status);
-            return null;
+            return false;
         }
     }
 }
@@ -85,7 +85,7 @@ const extractIntent = nlp => {
             return int.name;
         }
     } catch (error) { }
-    return null;
+    return false;
 }
 
 const extractEntity = (nlp, entity) => {
@@ -96,7 +96,7 @@ const extractEntity = (nlp, entity) => {
             return ent.value;
         }
     } catch (error) { }
-    return null;
+    return false;
 }
 
 module.exports = (nlpData, senderID) => {
